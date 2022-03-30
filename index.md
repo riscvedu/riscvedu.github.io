@@ -1,37 +1,63 @@
-## Welcome to GitHub Pages
+## RISC-V 培训
 
-You can use the [editor on GitHub](https://github.com/riscvedu/riscvedu.github.io/edit/main/index.md) to maintain and preview the content for your website in Markdown files.
+**RISC-V架构**
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### RISC-V架构的设计哲学
+* RISC-V是一个模块化的架构，不仅短小精悍，其不同的部分还能以模块化的方式组织在一起，从而试图通过一套统一的架构满足各种不同的应用
+* 基本指令数目仅有40多条，加上其他的模块化扩展指令总共几十条指令
 
-### Markdown
+### RISC-V指令集架构简介
+#### 模块化的指令子集
+* RISC-V的指令集使用模块化的方式进行组织，每一个模块使用一个英文字母标识。RISC-V最基本也是唯一强制要求实现的指令集部分是由I字母表示的基本整数指令子集。使用该整数指令子集，便能够实现完整的软件编译器。其他的指令子集部分均为可选的模块，包括M/A/F/D/C。
+* 特定组合“IMAFD”，称为通用组合，G表示
+* 提高代码密度，可选的压缩指令子集，C表示，编码长度为16bit，普通的非压缩指令的长度为32bit.
+* 进一步减少面积，提供嵌入式架构，E表示，主要用于追求极低面积与功耗的深嵌入式场景。该架构仅需要支持16个通用整数寄存器，而非嵌入式的普通架构则需要支持32个通用整数寄存器。
+可配置的通用寄存器组
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+#### 支持32位或64位的架构
+* 32位架构由RV32表示，每个通用寄存器的宽度为32比特
+* 64位架构由RV64表示，每个通用寄存器的宽度为64比特
+* RISC-V架构的整数通用寄存器组，包含32个（I架构）或者16个（E架构）通用整数寄存器，其中证书寄存器0被预留为常数0，其他的31个（I架构）或者15个（E架构）为普通的通用整数寄存器。
+如果使用浮点模块（F或D），则需要另外一个独立的浮点寄存器组，包含32个通用浮点寄存器。如果仅使用F模块的浮点指令子集，则每个通用浮点寄存器的宽度为32比特，如果使用了D模块的浮点指令子集，则* 每个通用浮点寄存器的宽度为64比特。
+* 规整的指令编码
 
-```markdown
-Syntax highlighted code block
+#### 简洁的存储器访问指令
+* 使用读指令Load和写指令Store指令访问存储器，其他指令无法访问
+* 存储器访问的基本单位是字节。
+* 读和写指令支持一个字节（8位）、半字（16位）、单字（32位）为单位的存储器读写操作
+* 64位架构还可支持双字（64位）为单位的存储器读写操作
+* 地址对齐
+* 小端格式
+* 不支持地址自增自减模式
+* 松散存储器模型
+* 高效的分支跳转指令
 
-# Header 1
-## Header 2
-### Header 3
+#### 简洁的子程序调用
+* 保存现场
+* 恢复现场
+* 不使用无条件码执行
+* 无分支延迟槽
+* 不使用零开销硬件循环
 
-- Bulleted
-- List
+#### 简洁的运算指令
+* 最基本的整数指令子集（I）支持的运算包括加法、减法、移位、按位逻辑操作和比较操作
+* 整数乘除法指令子集（M）支持的运算包括有符号或者无符号的乘法和除法操作
+* 单精度浮点指令子集（F）与双精度浮点指令子集（D）支持的运算包括浮点加减法、乘除法、乘累加、开平方根和比较等操作，同时提供整数与浮点、单精度与双精度浮点之间的格式转换操作。
+* 任何运算指令错误均不产生异常，而是产生某个特殊的默认值，同时设置某些状态寄存器的状态位。
+* 优雅的压缩指令子集
 
-1. Numbered
-2. List
+#### 特权模式
+* RISC-V定义了3种工作模式——特权模式
+* 机器模式 M mode（必选）
+* 监督模式 S mode
+* 用户模式 U mode
 
-**Bold** and _Italic_ and `Code` text
+#### CSR寄存器
+* 定义了一些控制和状态寄存器（Control and Status Register，CSR），用于配置或记录一些运行状态。是处理器核内部的寄存器，使用自己的地址编码空间，和存储器寻址的地址区间完全无关。
+* 专用CSR指令
+* 中断和异常
+* 矢量指令子集
+* 自定制指令扩展
 
-[Link](url) and ![Image](src)
-```
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/riscvedu/riscvedu.github.io/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+[refer to](https://blog.csdn.net/qq_41876038/article/details/120004172)
